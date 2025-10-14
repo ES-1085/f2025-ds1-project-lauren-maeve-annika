@@ -1,6 +1,6 @@
 ---
 title: "Project proposal"
-author: "Team name"
+author: "Lauren, Maeve, Annika"
 output: github_document
 ---
 
@@ -24,6 +24,9 @@ Text goes here. Place your data in the /data folder, and add dimensions and code
 # Code goes here
 # Read in your data file
 # Print the output of glimpse() or skim()
+season <- read_csv("../data/season.csv")
+glimpse(season)
+
 ```
 
 ## 3. Data analysis plan
@@ -39,4 +42,5 @@ Text goes here.
 # Code goes here
 # Code to calculate summary statistics
 # Code for a visualization
+#initial visualizations
 ```
