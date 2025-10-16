@@ -1,11 +1,11 @@
-# data
+# Match from Bundesliga League 2024
 
 Place data file(s) in this folder. Add the dimensions (rows and columns).
 
 Then, include codebooks (variables, and their descriptions) for your data file(s)
 using the following format.
 
-## name of data file
+## Matches for Bundesliga League 2024
 
 - `Date`: Date of game (dd/mm/yy)
 - `HomeTeam`: Name of home club team
@@ -17,15 +17,15 @@ using the following format.
 - `HTAG`: Half time away goals, number of goals scored by the away team during the first half of the match
 - `HTR`: Half time result, indicates who was winning at half time by (A)way, (D)raw, (H)ome
 - `Referee`: Name of referee for match
-- `HS`: 
-- `AS`: 
+- `HS`: Home team shots
+- `AS`: Away team shots
 - `HST`: Home team shots on target, number of times the home team takes a shot that is on course to score and would have entered the goal if not for the goalkeeper
 - `AST`: Away team shots on target, number of times the away team takes a shot that is on course to score and would have entered the goal if not for the goalkeeper
 - `HF`: Home team fouls, number of times home team commits a foul during a match
 - `AF`: Away team fouls, number of times away team commits a foul during a match
-- `HC`: Home corners,
-- `AC`: Away corners, 
-- `HY`: 
-- `AY`: 
-- `HR`: 
-- `AR`: 
+- `HC`: Home corners kicks
+- `AC`: Away corners kicks
+- `HY`: Home yellow cards
+- `AY`: Away yellow cards
+- `HR`: Home red cards
+- `AR`: Away yellow cards
