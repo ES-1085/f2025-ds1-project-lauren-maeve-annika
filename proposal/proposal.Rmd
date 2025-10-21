@@ -7,29 +7,21 @@ output: github_document
 ```{r load-packages, message = FALSE}
 library(tidyverse)
 library(broom)
-## Add any additional packages you are using here
 ```
 
 ## 1. Introduction
 
-The introduction should introduce your general research question(s) and your data (where it came from, how it was collected, what are the cases, what are the variables, etc.).
+The research question we're exploring is how does being the home or away team affect shots taken and shots on target?
 
-The research question we're exploring is...?
 In this project, we are using data from the Football Datasets GitHub Repository. This dataset provides detailed match statistics for all Bundesliga games in the 2024-2025 season that is taken from the Football Data UK Co website. Each row represents a single match, with information on both the home and away teams, goals scored, shot taken, scores throughout the game, fouls, etc. See README for full variables and names. 
-
-
-Text goes here. Refer to the Markdown Quick Reference: Help -> Markdown Quick Reference. 
-
-
 
 ## 2. Data
 
-Text goes here. Place your data in the /data folder, and add dimensions and codebook to the README in that folder. Then print out the output of glimpse() or skim() of your data frame.
+```{r dimensions}
+dim(season)
+```
 
-```{r}
-# Code goes here
-# Read in your data file
-# Print the output of glimpse() or skim()
+```{r glimpse}
 season <- read_csv("../data/season.csv")
 glimpse(season)
 
@@ -37,11 +29,25 @@ glimpse(season)
 
 ## 3. Data analysis plan
 
-Text goes here.
 - What variables will you visualize to explore your research questions?
+
+We plan to use the HS, AS, HST, AST, HomeTeam, and AwayTeam variables to visualize the question.
+
 - Will there be any other data that you need to find to help with your research question?
+
+No, as all of our data is in the existing dataset.
+
 - Very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. (You can add to these later as you work on your project.)
-- The data visualization(s) that you believe will be useful in exploring your question(s). (You can update these later as you work on your project.)
+
+The data visualization(s) that you believe will be useful in exploring your question(s). (You can update these later as you work on your project.)
+
+ - Histograms - to compare `HomeTeam` and `AwayTeam` depending on `HS` and `AS` 
+
+ - Density plots - to compare `HS` and `AS` with `HST` and `AST
+
+ - Scatter plot - comparing between the two teams
+ 
+ - Bar plots - to show a difference in `HS` and `AS`
 
 
 ```{r}

@@ -25,4 +25,4 @@ There are 306 observations and 22 variables.
 - `HY`: Home yellow cards
 - `AY`: Away yellow cards
 - `HR`: Home red cards
-- `AR`: Away yellow cards
+- `AR`: Away red cards
