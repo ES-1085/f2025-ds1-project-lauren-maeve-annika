@@ -1,9 +1,6 @@
 # Match from Bundesliga League 2024
 
-Place data file(s) in this folder. Add the dimensions (rows and columns).
-
-Then, include codebooks (variables, and their descriptions) for your data file(s)
-using the following format.
+There are `n row(season)` and `n col(season)`
 
 ## Matches for Bundesliga League 2024
 
