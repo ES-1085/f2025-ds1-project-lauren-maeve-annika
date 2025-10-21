@@ -1,6 +1,6 @@
 # Match from Bundesliga League 2024
 
-There are `n row(season)` and `n col(season)`
+There are 306 observations and 22 variables.
 
 ## Matches for Bundesliga League 2024
 
