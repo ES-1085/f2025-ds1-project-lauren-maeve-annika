@@ -1,6 +1,6 @@
-Project title
+Does Home Field Matter? Exploring Shots and Accuracy in Bundesliga Matches
 ================
-by Team name
+by Lauren, Maeve, Annika
 
 ## Summary
 
