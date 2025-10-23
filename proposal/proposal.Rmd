@@ -18,7 +18,7 @@ In this project, we are using data from the Football Datasets GitHub Repository.
 ## 2. Data
 
 ```{r dimensions}
-dim(season)
+# dim(season)
 ```
 
 ```{r glimpse}
@@ -53,6 +53,15 @@ The data visualization(s) that you believe will be useful in exploring your ques
 ```{r}
 # Code goes here
 # Code to calculate summary statistics
+season |>
+  group_by(HomeTeam) |>
+  summarise(
+    mean_HS = mean(HS, na.rm = TRUE),
+    mean_HST = mean(HST, na.rm = TRUE),
+    sd_HS = sd(HS, na.rm = TRUE),
+    sd_HST = sd(HST, na.rm = TRUE),
+    r = cor(HS, HST, use = "complete.obs")
+  )
 # Code for a visualization
 #initial visualizations
 ```

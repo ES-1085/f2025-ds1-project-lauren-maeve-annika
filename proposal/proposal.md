@@ -5,36 +5,28 @@ Lauren, Maeve, Annika
 ``` r
 library(tidyverse)
 library(broom)
-## Add any additional packages you are using here
 ```
 
 ## 1. Introduction
 
-The introduction should introduce your general research question(s) and
-your data (where it came from, how it was collected, what are the cases,
-what are the variables, etc.).
+The research question we’re exploring is how does being the home or away
+team affect shots taken and shots on target?
 
-The research question we’re exploring is…? In this project, we are using
-data from the Football Datasets GitHub Repository. This dataset provides
-detailed match statistics for all Bundesliga games in the 2024-2025
-season that is taken from the Football Data UK Co website. Each row
-represents a single match, with information on both the home and away
-teams, goals scored, shot taken, scores throughout the game, fouls, etc.
-See README for full variables and names.
-
-Text goes here. Refer to the Markdown Quick Reference: Help -\> Markdown
-Quick Reference.
+In this project, we are using data from the Football Datasets GitHub
+Repository. This dataset provides detailed match statistics for all
+Bundesliga games in the 2024-2025 season that is taken from the Football
+Data UK Co website. Each row represents a single match, with information
+on both the home and away teams, goals scored, shot taken, scores
+throughout the game, fouls, etc. See README for full variables and
+names.
 
 ## 2. Data
 
-Text goes here. Place your data in the /data folder, and add dimensions
-and codebook to the README in that folder. Then print out the output of
-glimpse() or skim() of your data frame.
+``` r
+# dim(season)
+```
 
 ``` r
-# Code goes here
-# Read in your data file
-# Print the output of glimpse() or skim()
 season <- read_csv("../data/season.csv")
 ```
 
@@ -79,18 +71,71 @@ glimpse(season)
 
 ## 3. Data analysis plan
 
-Text goes here. - What variables will you visualize to explore your
-research questions? - Will there be any other data that you need to find
-to help with your research question? - Very preliminary exploratory data
-analysis, including some summary statistics and visualizations, along
-with some explanation on how they help you learn more about your data.
-(You can add to these later as you work on your project.) - The data
-visualization(s) that you believe will be useful in exploring your
-question(s). (You can update these later as you work on your project.)
+- What variables will you visualize to explore your research questions?
+
+We plan to use the HS, AS, HST, AST, HomeTeam, and AwayTeam variables to
+visualize the question.
+
+- Will there be any other data that you need to find to help with your
+  research question?
+
+No, as all of our data is in the existing dataset.
+
+- Very preliminary exploratory data analysis, including some summary
+  statistics and visualizations, along with some explanation on how they
+  help you learn more about your data. (You can add to these later as
+  you work on your project.)
+
+The data visualization(s) that you believe will be useful in exploring
+your question(s). (You can update these later as you work on your
+project.)
+
+- Histograms - to compare `HomeTeam` and `AwayTeam` depending on `HS`
+  and `AS`
+
+- Density plots - to compare `HS` and `AS` with `HST` and \`AST
+
+- Scatter plot - comparing between the two teams
+
+- Bar plots - to show a difference in `HS` and `AS`
 
 ``` r
 # Code goes here
 # Code to calculate summary statistics
+season |>
+  group_by(HomeTeam) |>
+  summarise(
+    mean_HS = mean(HS, na.rm = TRUE),
+    mean_HST = mean(HST, na.rm = TRUE),
+    sd_HS = sd(HS, na.rm = TRUE),
+    sd_HST = sd(HST, na.rm = TRUE),
+    r = cor(HS, HST, use = "complete.obs")
+  )
+```
+
+    ## # A tibble: 18 × 6
+    ##    HomeTeam      mean_HS mean_HST sd_HS sd_HST     r
+    ##    <chr>           <dbl>    <dbl> <dbl>  <dbl> <dbl>
+    ##  1 Augsburg         14.1     4.71  6.50   2.71 0.751
+    ##  2 Bayern Munich    21.2     9     5.80   3.06 0.802
+    ##  3 Bochum           14.5     4.41  4.52   2.21 0.647
+    ##  4 Dortmund         15.3     5.41  5.34   2.12 0.783
+    ##  5 Ein Frankfurt    16       5.82  6.57   2.13 0.711
+    ##  6 Freiburg         12.4     4.47  5.16   2.60 0.825
+    ##  7 Heidenheim       12.9     3.94  4.97   2.63 0.739
+    ##  8 Hoffenheim       14.1     4.94  4.72   2.14 0.639
+    ##  9 Holstein Kiel    11.2     4.24  4.67   2.59 0.633
+    ## 10 Leverkusen       17.5     6.53  5.84   2.98 0.690
+    ## 11 M'gladbach       12.6     4.71  4.05   2.62 0.698
+    ## 12 Mainz            13.1     4.76  4.55   1.99 0.418
+    ## 13 RB Leipzig       12.8     5.35  3.61   1.84 0.381
+    ## 14 St Pauli         11.7     3.41  5.85   2.24 0.884
+    ## 15 Stuttgart        16.2     6.35  6.49   3.02 0.694
+    ## 16 Union Berlin     12.8     3.81  3.54   1.72 0.464
+    ## 17 Werder Bremen    13.5     3.94  5.70   2.33 0.369
+    ## 18 Wolfsburg        13.5     4.53  4.11   1.84 0.518
+
+``` r
 # Code for a visualization
 #initial visualizations
 ```
