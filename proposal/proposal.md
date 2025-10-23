@@ -100,8 +100,6 @@ project.)
 - Bar plots - to show a difference in `HS` and `AS`
 
 ``` r
-# Code goes here
-# Code to calculate summary statistics
 season |>
   group_by(HomeTeam) |>
   summarise(
@@ -136,6 +134,29 @@ season |>
     ## 18 Wolfsburg        13.5     4.53  4.11   1.84 0.518
 
 ``` r
-# Code for a visualization
-#initial visualizations
+team_order <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE)) |>
+  arrange(desc(mean_HS)) |>
+  pull(HomeTeam)
+summary_long <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE),
+            mean_AS = mean(AS, na.rm = TRUE)) |>
+  pivot_longer(cols = c(mean_HS, mean_AS),
+               names_to = "ShotType",
+               values_to = "Shots")
+ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
+                         y = Shots,
+                         fill = ShotType)) +
+  geom_col(position = "identity", alpha = 0.7) +
+  scale_fill_manual(values = c("mean_HS" = "palevioletred1", "mean_AS" = "palevioletred3")) +
+  labs(title = "Average Home vs Away Shots per Team",
+       x = "Team",
+       y = "Average Shots",
+       fill = "Shot Type") +
+  coord_flip() +
+  ylim(0, 25)
 ```
+
+![](proposal_files/figure-gfm/bar-average-shots-1.png)<!-- -->
