@@ -13,10 +13,12 @@ library(broom)
 
 ## Data Clean Up Steps for Overall Data
 
-### Step 1: _________
+### Step 1: Remove Referee Category
+
+For our dataset, there were no names listed in the Referee variable and it was irrelevant for our project.
 
 ```{r}
-
+season$Referee <- NULL
 ```
 
 ### Step 2: ________

@@ -1,6 +1,6 @@
 Project memo
 ================
-Team name
+Lauren, Maeve, Annika
 
 This document should contain a detailed account of the data clean up for
 your data and the design choices you are making for your plots. For
@@ -48,9 +48,8 @@ ggsave("example-starwars-wide.png", width = 6, height = 4)
 
 #### Data cleanup steps specific to plot 1
 
-``` r
-# This section is optional and depends on if you have some data cleaning steps specific to a particular plot
-```
+These data cleaning sections are optional and depend on if you have some
+data cleaning steps specific to a particular plot
 
 #### Final Plot 1
 
