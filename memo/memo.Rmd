@@ -1,6 +1,6 @@
 ---
 title: "Project memo"
-author: "Team name"
+author: "Lauren, Maeve, Annika"
 output: github_document
 ---
 
