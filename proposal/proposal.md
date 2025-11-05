@@ -132,31 +132,3 @@ season |>
     ## 16 Union Berlin     12.8     3.81  3.54   1.72 0.464
     ## 17 Werder Bremen    13.5     3.94  5.70   2.33 0.369
     ## 18 Wolfsburg        13.5     4.53  4.11   1.84 0.518
-
-``` r
-team_order <- season |>
-  group_by(HomeTeam) |>
-  summarise(mean_HS = mean(HS, na.rm = TRUE)) |>
-  arrange(desc(mean_HS)) |>
-  pull(HomeTeam)
-summary_long <- season |>
-  group_by(HomeTeam) |>
-  summarise(mean_HS = mean(HS, na.rm = TRUE),
-            mean_AS = mean(AS, na.rm = TRUE)) |>
-  pivot_longer(cols = c(mean_HS, mean_AS),
-               names_to = "ShotType",
-               values_to = "Shots")
-ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
-                         y = Shots,
-                         fill = ShotType)) +
-  geom_col(position = "identity", alpha = 0.7) +
-  scale_fill_manual(values = c("mean_HS" = "palevioletred1", "mean_AS" = "palevioletred3")) +
-  labs(title = "Average Home vs Away Shots per Team",
-       x = "Team",
-       y = "Average Shots",
-       fill = "Shot Type") +
-  coord_flip() +
-  ylim(0, 25)
-```
-
-![](proposal_files/figure-gfm/bar-average-shots-1.png)<!-- -->
