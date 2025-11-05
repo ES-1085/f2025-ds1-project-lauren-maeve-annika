@@ -7,8 +7,8 @@ There are 306 observations and 22 variables.
 - `Date`: Date of game (dd/mm/yy)
 - `HomeTeam`: Name of home club team
 - `AwayTeam`: Name of away club team
-- `FTHG`: Full team home goals, number of goals the home team scored by the end of match
-- `FTAG`: Full team away goals, number of goals the away team scored by the end of match
+- `HG`: Full time home goals, number of goals the home team scored by the end of match
+- `AG`: Full time away goals, number of goals the away team scored by the end of match
 - `FTR`: Full time result, winner of match signified by (A)way, (D)raw, (H)ome
 - `HTHG`: Half time home goals, number of goals scored by the home team during the first half of the match
 - `HTAG`: Half time away goals, number of goals scored by the away team during the first half of the match

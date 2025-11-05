@@ -16,9 +16,21 @@ library(broom)
 
 ## Data Clean Up Steps for Overall Data
 
-### Step 1: \_\_\_\_\_\_\_\_\_
+### Step 1: Remove Referee Category
 
-### Step 2: \_\_\_\_\_\_\_\_
+For our dataset, there were no names listed in the Referee variable and
+it was irrelevant for our project.
+
+``` r
+#season$Referee <- NULL
+```
+
+### Step 2: Rename Variables
+
+The variables have too many similar names and their names are not
+intuitive to someone unfamiliar with the dataset.
+
+\#`` {r rename-variables} #season <- as_tibble(season) %>%  #  rename(  #         `Home_goals` = `FTHG`, #         `Away_goals` = `FTAG`, #         `Fulltime_result` = `FTR`, #         `Halftime_home_goals` = `HTHG`, #         `Halftime_away_goals` = `HTAG`, #         `Halftime_result` = `HTR`, #         `Home_shots` = `HS`, #         `Away_shots` = `AS`, #         `Home_shots_on_target` = `HST`, #         `Away_shots_on_target` = `AST`, #         `Home_fouls` = `HF`, #         `Away_fouls` = `AF`, #         `Home_corner_kicks` = `HC`, #         `Away_corner_kicks` = `AC`, #         `Home_yellow_cards` = `HY`, #         `Away_yellow_cards` = `AY`, #         `Home_red_cards` = `HR`, #         `Away_red_cards` = `AR`,) # ``
 
 ## Plots
 

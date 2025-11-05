@@ -17,11 +17,13 @@ library(broom)
 
 For our dataset, there were no names listed in the Referee variable and it was irrelevant for our project.
 
-```{r}
-season$Referee <- NULL
+```{r remove-referee}
+#season$Referee <- NULL
 ```
 
-### Step 2: ________
+### Step 2: _______
+
+
 
 ## Plots
 
