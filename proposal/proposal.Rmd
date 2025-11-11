@@ -37,9 +37,9 @@ We plan to use the HS, AS, HST, AST, HomeTeam, and AwayTeam variables to visuali
 
 No, as all of our data is in the existing dataset.
 
-- Very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. (You can add to these later as you work on your project.)
+- Very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. 
 
-The data visualization(s) that you believe will be useful in exploring your question(s). (You can update these later as you work on your project.)
+The data visualization(s) that you believe will be useful in exploring your question(s).
 
  - Histograms - to compare `HomeTeam` and `AwayTeam` depending on `HS` and `AS` 
 
