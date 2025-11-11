@@ -92,6 +92,6 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
   coord_flip() +
   ylim(0, 25)
 
-ggsave("our_newplot.png")
+# ggsave("our_newplot.png")
 ```
 

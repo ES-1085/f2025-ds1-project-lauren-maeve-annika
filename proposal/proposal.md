@@ -139,6 +139,7 @@ team_order <- season |>
   summarise(mean_HS = mean(HS, na.rm = TRUE)) |>
   arrange(desc(mean_HS)) |>
   pull(HomeTeam)
+
 summary_long <- season |>
   group_by(HomeTeam) |>
   summarise(mean_HS = mean(HS, na.rm = TRUE),
@@ -146,11 +147,15 @@ summary_long <- season |>
   pivot_longer(cols = c(mean_HS, mean_AS),
                names_to = "ShotType",
                values_to = "Shots")
+
 ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
                          y = Shots,
                          fill = ShotType)) +
   geom_col(position = "identity", alpha = 0.7) +
-  scale_fill_manual(values = c("mean_HS" = "palevioletred1", "mean_AS" = "palevioletred3")) +
+  scale_fill_manual(
+    values = c("mean_HS" = "palevioletred1", "mean_AS" = "palevioletred3"),
+    labels = c("mean_HS" = "Average Home Shots", "mean_AS" = "Average Away Shots")
+  ) +
   labs(title = "Average Home vs Away Shots per Team",
        x = "Team",
        y = "Average Shots",
@@ -162,7 +167,5 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
 ![](proposal_files/figure-gfm/bar-average-shots-1.png)<!-- -->
 
 ``` r
-ggsave("our_plot.png")
+# ggsave("our_newplot.png")
 ```
-
-    ## Saving 7 x 5 in image
