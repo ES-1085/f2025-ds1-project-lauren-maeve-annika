@@ -27,9 +27,13 @@ For our dataset, there were no names listed in the Referee variable and it was i
 
 ## Plots
 
+### Plot 1: Bar Chart
+
+#### Data cleanup steps specific to plot 1
+
 We chose these colors since they were different enough that someone can glance at the graph and see the difference with the low opacity. We wanted overlap so that each team can compare their home and away game shots taken easily.
 
-```{r average-shots ggsave}
+```{r bar-average-shots ggsave}
 team_order <- season |>
   group_by(HomeTeam) |>
   summarise(mean_HS = mean(HS, na.rm = TRUE)) |>
@@ -62,26 +66,44 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
 #ggsave("our_newplot.png")
 ```
 
-
-### Plot 1: Bar Chart
-
-#### Data cleanup steps specific to plot 1
-
-These data cleaning sections are optional and depend on if you have some data cleaning steps specific to a particular plot
-
-```{r}
-
-```
-
+After feedback from class, we changed the graph type to a multi bar chart so the overlap is removed and it allows for clear understanding of the graph and readability to be easier. We also changed the graph to be more color blind friendly so accessibility is also higher.
 
 #### Final Plot 1
 
-```{r}
+```{r multi-bar-average-shots ggsave}
+team_order <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE)) |>
+  arrange(desc(mean_HS)) |>
+  pull(HomeTeam)
 
+summary_long <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE),
+            mean_AS = mean(AS, na.rm = TRUE)) |>
+  pivot_longer(cols = c(mean_HS, mean_AS),
+               names_to = "ShotType",
+               values_to = "Shots")
+
+ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
+                         y = Shots,
+                         fill = ShotType)) +
+  geom_col(position = "dodge", alpha = 0.8) +
+  scale_fill_manual(
+    values = c("mean_HS" = "palevioletred1", "mean_AS" = "cornflowerblue"),
+    labels = c("mean_HS" = "Average Home Shots", "mean_AS" = "Average Away Shots")
+  ) +
+  labs(title = "Average Home vs Away Shots per Team",
+       x = "Team",
+       y = "Average Shots",
+       fill = "Shot Type") +
+  coord_flip() +
+  ylim(0, 25)
+
+#ggsave("our_newplot.png")
 ```
 
-
-### Plot 2: _________
+### Plot 2: Box Plot
 ```{r away-vs-home-boxplot}
 shots_data <- data.frame(
   ShotsOnTarget = c(season$HST, season$AST),

@@ -82,7 +82,7 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
                          fill = ShotType)) +
   geom_col(position = "identity", alpha = 0.7) +
   scale_fill_manual(
-    values = c("mean_HS" = "palevioletred1", "mean_AS" = "palevioletred3"),
+    values = c("mean_HS" = "goldenrod1", "mean_AS" = "palevioletred1"),
     labels = c("mean_HS" = "Average Home Shots", "mean_AS" = "Average Away Shots")
   ) +
   labs(title = "Average Home vs Away Shots per Team",
@@ -94,6 +94,9 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
 
 # ggsave("our_newplot.png")
 ```
+
+
+
 
 ```{r box-shot-on-target}
 shots_data <- data.frame(
