@@ -89,7 +89,7 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
                          y = Shots,
                          fill = ShotType)) +
   geom_col(position = "dodge", alpha = 0.8) +
-  scale_fill_manual(
+  scale_fill_viridis_d(
     values = c("mean_HS" = "palevioletred1", "mean_AS" = "cornflowerblue"),
     labels = c("mean_HS" = "Average Home Shots", "mean_AS" = "Average Away Shots")
   ) +
@@ -99,6 +99,39 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
        fill = "Shot Type") +
   coord_flip() +
   ylim(0, 25)
+
+#ggsave("our_newplot.png")
+```
+
+Post meeting together, we weren't sure if the colors would be accessible enough for the audience so we chose a color blind friendly option.
+
+```{r multi-bar-average-shots ggsave}
+team_order <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE)) |>
+  arrange(desc(mean_HS)) |>
+  pull(HomeTeam)
+
+summary_long <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE),
+            mean_AS = mean(AS, na.rm = TRUE)) |>
+  pivot_longer(cols = c(mean_HS, mean_AS),
+               names_to = "ShotType",
+               values_to = "Shots")
+
+ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
+                         y = Shots,
+                         fill = ShotType)) +
+  geom_col(position = "dodge", alpha = 0.8) +
+  scale_color_viridis_d() +
+  labs(title = "Average Home vs Away Shots per Team",
+       x = "Team",
+       y = "Average Shots",
+       fill = "Shot Type") +
+  coord_flip() +
+  ylim(0, 25) +
+ # xlim(0, 25)
 
 #ggsave("our_newplot.png")
 ```
