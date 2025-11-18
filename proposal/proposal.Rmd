@@ -62,6 +62,7 @@ season |>
   )
 ```
 
+
 ```{r bar-average-shots}
 team_order <- season |>
   group_by(HomeTeam) |>
@@ -95,9 +96,6 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
 # ggsave("our_newplot.png")
 ```
 
-
-
-
 ```{r box-shot-on-target}
 shots_data <- data.frame(
   ShotsOnTarget = c(season$HST, season$AST),
@@ -113,5 +111,11 @@ ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
   ) +
   scale_fill_manual(values = c("Home" = "goldenrod1", "Away" = "palevioletred1"))
 #ggsave("our_newboxplot.png")
+```
+
+
+
+```{r foul-graph}
+
 ```
 

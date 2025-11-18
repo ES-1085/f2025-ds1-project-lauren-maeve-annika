@@ -69,15 +69,87 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
 
 These data cleaning sections are optional and depend on if you have some data cleaning steps specific to a particular plot
 
+<<<<<<< HEAD
 ```{r}
+=======
+ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
+                         y = Shots,
+                         fill = ShotType)) +
+  geom_col(position = "dodge", alpha = 0.8) +
+  scale_fill_viridis_d(
+    values = c("mean_HS" = "palevioletred1", "mean_AS" = "cornflowerblue"),
+    labels = c("mean_HS" = "Average Home Shots", "mean_AS" = "Average Away Shots")
+  ) +
+  labs(title = "Average Home vs Away Shots per Team",
+       x = "Team",
+       y = "Average Shots",
+       fill = "Shot Type") +
+  coord_flip() +
+  ylim(0, 25)
+>>>>>>> fec7c627b19d61fa20de7a626ae0195d791a98c7
 
 ```
 
+<<<<<<< HEAD
 
 #### Final Plot 1
 
 ```{r}
 
+=======
+Post meeting together, we weren't sure if the colors would be accessible enough for the audience so we chose a color blind friendly option.
+
+```{r multi-bar-average-shots ggsave}
+team_order <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE)) |>
+  arrange(desc(mean_HS)) |>
+  pull(HomeTeam)
+
+summary_long <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE),
+            mean_AS = mean(AS, na.rm = TRUE)) |>
+  pivot_longer(cols = c(mean_HS, mean_AS),
+               names_to = "ShotType",
+               values_to = "Shots")
+
+ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
+                         y = Shots,
+                         fill = ShotType)) +
+  geom_col(position = "dodge", alpha = 0.8) +
+  scale_color_viridis_d() +
+  labs(title = "Average Home vs Away Shots per Team",
+       x = "Team",
+       y = "Average Shots",
+       fill = "Shot Type") +
+  coord_flip() +
+  ylim(0, 25) +
+ # xlim(0, 25)
+
+#ggsave("our_newplot.png")
+```
+
+### Plot 2: Box Plot
+
+#### Data cleanup steps specific to plot 2
+
+```{r away-vs-home-boxplot}
+shots_data <- data.frame(
+  ShotsOnTarget = c(season$HST, season$AST),
+  Team = c(rep("Home", nrow(season)), rep("Away", nrow(season)))
+)
+ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
+  geom_boxplot(alpha = 0.8) +
+  labs(
+    title = "Home vs Away Shots on Target",
+    x = "Team",
+    y = "Shots on Target per Match",
+    fill = "Team"
+  ) +
+  scale_fill_manual(values = c("Home" = "goldenrod1", "Away" = "palevioletred1"))
+#ggsave("our_newboxplot.png")
+>>>>>>> fec7c627b19d61fa20de7a626ae0195d791a98c7
 ```
 
 
