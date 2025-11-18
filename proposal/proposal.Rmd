@@ -37,9 +37,9 @@ We plan to use the HS, AS, HST, AST, HomeTeam, and AwayTeam variables to visuali
 
 No, as all of our data is in the existing dataset.
 
-- Very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. (You can add to these later as you work on your project.)
+- Very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. 
 
-The data visualization(s) that you believe will be useful in exploring your question(s). (You can update these later as you work on your project.)
+The data visualization(s) that you believe will be useful in exploring your question(s).
 
  - Histograms - to compare `HomeTeam` and `AwayTeam` depending on `HS` and `AS` 
 
@@ -61,3 +61,58 @@ season |>
     r = cor(HS, HST, use = "complete.obs")
   )
 ```
+
+
+```{r bar-average-shots}
+team_order <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE)) |>
+  arrange(desc(mean_HS)) |>
+  pull(HomeTeam)
+
+summary_long <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE),
+            mean_AS = mean(AS, na.rm = TRUE)) |>
+  pivot_longer(cols = c(mean_HS, mean_AS),
+               names_to = "ShotType",
+               values_to = "Shots")
+
+ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
+                         y = Shots,
+                         fill = ShotType)) +
+  geom_col(position = "identity", alpha = 0.7) +
+  scale_fill_manual(
+    values = c("mean_HS" = "goldenrod1", "mean_AS" = "palevioletred1"),
+    labels = c("mean_HS" = "Average Home Shots", "mean_AS" = "Average Away Shots")
+  ) +
+  labs(title = "Average Home vs Away Shots per Team",
+       x = "Team",
+       y = "Average Shots",
+       fill = "Shot Type") +
+  coord_flip() +
+  ylim(0, 25)
+
+# ggsave("our_newplot.png")
+```
+
+
+
+
+```{r box-shot-on-target}
+shots_data <- data.frame(
+  ShotsOnTarget = c(season$HST, season$AST),
+  Team = c(rep("Home", nrow(season)), rep("Away", nrow(season)))
+)
+ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
+  geom_boxplot(alpha = 0.8) +
+  labs(
+    title = "Home vs Away Shots on Target",
+    x = "Team",
+    y = "Shots on Target per Match",
+    fill = "Team"
+  ) +
+  scale_fill_manual(values = c("Home" = "goldenrod1", "Away" = "palevioletred1"))
+#ggsave("our_newboxplot.png")
+```
+
