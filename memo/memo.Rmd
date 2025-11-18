@@ -137,7 +137,6 @@ ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
   ) +
   scale_fill_manual(values = c("Home" = "goldenrod1", "Away" = "palevioletred1"))
 #ggsave("our_newboxplot.png")
->>>>>>> fec7c627b19d61fa20de7a626ae0195d791a98c7
 ```
 
 
