@@ -68,8 +68,6 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
 
 After feedback from class, we changed the graph type to a multi bar chart so the overlap is removed and it allows for clear understanding of the graph and readability to be easier. We also changed the graph to be more color blind friendly so accessibility is also higher.
 
-#### Final Plot 1
-
 ```{r multi-bar-average-shots ggsave}
 team_order <- season |>
   group_by(HomeTeam) |>
@@ -103,7 +101,9 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
 #ggsave("our_newplot.png")
 ```
 
-Post meeting together, we weren't sure if the colors would be accessible enough for the audience so we chose a color blind friendly option.
+Post meeting together, we weren't sure if the colors would be accessible enough for the audience so we chose a color blind friendly option and made the bars more separate.
+
+#### Final Plot 1
 
 ```{r multi-bar-average-shots ggsave}
 team_order <- season |>
@@ -123,15 +123,14 @@ summary_long <- season |>
 ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
                          y = Shots,
                          fill = ShotType)) +
-  geom_col(position = "dodge", alpha = 0.8) +
+  geom_col(position = "dodge", alpha = 0.8, width = 0.7) +
   scale_color_viridis_d() +
   labs(title = "Average Home vs Away Shots per Team",
        x = "Team",
        y = "Average Shots",
        fill = "Shot Type") +
   coord_flip() +
-  ylim(0, 25) +
- # xlim(0, 25)
+  ylim(0, 25)
 
 #ggsave("our_newplot.png")
 ```
