@@ -96,9 +96,6 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
 # ggsave("our_newplot.png")
 ```
 
-
-
-
 ```{r box-shot-on-target}
 shots_data <- data.frame(
   ShotsOnTarget = c(season$HST, season$AST),
