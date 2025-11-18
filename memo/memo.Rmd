@@ -138,3 +138,22 @@ ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
   scale_fill_manual(values = c("Home" = "goldenrod1", "Away" = "palevioletred1"))
 #ggsave("our_newboxplot.png")
 ```
+
+Changed the color to be more colorblind friendly and accessible.
+
+```{r away-vs-home-boxplot}
+shots_data <- data.frame(
+  ShotsOnTarget = c(season$HST, season$AST),
+  Team = c(rep("Home", nrow(season)), rep("Away", nrow(season)))
+)
+ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
+  geom_boxplot(alpha = 0.8) +
+  labs(
+    title = "Home vs Away Shots on Target",
+    x = "Team",
+    y = "Shots on Target per Match",
+    fill = "Team"
+  ) +
+  scale_color_viridis_d()
+#ggsave("our_newboxplot.png")
+```
