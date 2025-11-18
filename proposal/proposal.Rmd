@@ -114,8 +114,30 @@ ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
 ```
 
 
-
 ```{r foul-graph}
-
+foul_summary <- season |>
+  group_by(HomeTeam) |>
+  summarise(
+    mean_HF = mean(HF, na.rm = TRUE),
+    mean_AF = mean(AF, na.rm = TRUE)
+  ) |>
+   mutate(HomeTeam = factor(HomeTeam, levels = HomeTeam[order(mean_HF)])) |>
+   pivot_longer(
+    cols = c(mean_HF, mean_AF),
+    names_to = "FoulType",
+    values_to = "Fouls"
+)
+ggplot(foul_summary, aes(x = HomeTeam, y = Fouls, color = FoulType, group = HomeTeam)) +
+  geom_line(alpha = 0.5, linewidth = 1) +
+  geom_point(size = 3) +
+  scale_fill_viridis_d() +
+  labs(
+    title = "Average Home vs Away Fouls per Team",
+    x = "Team",
+    y = "Average Fouls",
+    color = "Foul Type"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
