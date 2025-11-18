@@ -114,6 +114,7 @@ ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
 ```
 
 
+
 ```{r foul-graph}
 
 ```

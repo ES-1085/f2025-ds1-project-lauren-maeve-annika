@@ -27,13 +27,9 @@ For our dataset, there were no names listed in the Referee variable and it was i
 
 ## Plots
 
-### Plot 1: Bar Chart
-
-#### Data cleanup steps specific to plot 1
-
 We chose these colors since they were different enough that someone can glance at the graph and see the difference with the low opacity. We wanted overlap so that each team can compare their home and away game shots taken easily.
 
-```{r bar-average-shots ggsave}
+```{r average-shots ggsave}
 team_order <- season |>
   group_by(HomeTeam) |>
   summarise(mean_HS = mean(HS, na.rm = TRUE)) |>
@@ -53,7 +49,7 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
                          fill = ShotType)) +
   geom_col(position = "identity", alpha = 0.7) +
   scale_fill_manual(
-    values = c("mean_HS" = "goldenrod1", "mean_AS" = "palevioletred1"),
+    values = c("mean_HS" = "palevioletred1", "mean_AS" = "palevioletred3"),
     labels = c("mean_HS" = "Average Home Shots", "mean_AS" = "Average Away Shots")
   ) +
   labs(title = "Average Home vs Away Shots per Team",
@@ -66,23 +62,12 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
 #ggsave("our_newplot.png")
 ```
 
-After feedback from class, we changed the graph type to a multi bar chart so the overlap is removed and it allows for clear understanding of the graph and readability to be easier. We also changed the graph to be more color blind friendly so accessibility is also higher.
-
 ```{r multi-bar-average-shots ggsave}
 team_order <- season |>
   group_by(HomeTeam) |>
   summarise(mean_HS = mean(HS, na.rm = TRUE)) |>
   arrange(desc(mean_HS)) |>
   pull(HomeTeam)
-
-summary_long <- season |>
-  group_by(HomeTeam) |>
-  summarise(mean_HS = mean(HS, na.rm = TRUE),
-            mean_AS = mean(AS, na.rm = TRUE)) |>
-  pivot_longer(cols = c(mean_HS, mean_AS),
-               names_to = "ShotType",
-               values_to = "Shots")
-
 ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
                          y = Shots,
                          fill = ShotType)) +
@@ -98,13 +83,11 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
   coord_flip() +
   ylim(0, 25)
 
-#ggsave("our_newplot.png")
 ```
 
 Post meeting together, we weren't sure if the colors would be accessible enough for the audience so we chose a color blind friendly option and made the bars more separate.
 
 #### Final Plot 1
-
 ```{r multi-bar-average-shots ggsave}
 team_order <- season |>
   group_by(HomeTeam) |>
@@ -154,23 +137,15 @@ ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
   ) +
   scale_fill_manual(values = c("Home" = "goldenrod1", "Away" = "palevioletred1"))
 #ggsave("our_newboxplot.png")
+>>>>>>> fec7c627b19d61fa20de7a626ae0195d791a98c7
 ```
 
-Following advice from first plot critique, we changed colors to be more colorblind friendly.
 
-```{r away-vs-home-boxplot}
-shots_data <- data.frame(
-  ShotsOnTarget = c(season$HST, season$AST),
-  Team = c(rep("Home", nrow(season)), rep("Away", nrow(season)))
-)
-ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
-  geom_boxplot(alpha = 0.8) +
-  labs(
-    title = "Home vs Away Shots on Target",
-    x = "Team",
-    y = "Shots on Target per Match",
-    fill = "Team"
-  ) +
-  scale_fill_manual(values = c("Home" = "palevioletred1", "Away" = "cornflowerblue"))
-#ggsave("our_newboxplot.png")
-```
+### Plot 2: _________
+
+### Plot 3: ___________
+
+Add more plot sections as needed. Each project should have at least 3 plots, but talk to me if you have fewer than 3.
+
+### Plot 4: ___________ 
+
