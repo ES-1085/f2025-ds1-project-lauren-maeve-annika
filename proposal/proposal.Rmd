@@ -120,7 +120,7 @@ foul_summary <- season |>
   summarise(
     mean_HF = mean(HF, na.rm = TRUE),
     mean_AF = mean(AF, na.rm = TRUE),
-    discrepancy = abs(mean_HF - mean_AF)  # absolute difference
+    discrepancy = abs(mean_HF - mean_AF)
   ) |>
   ungroup()
 
@@ -142,12 +142,13 @@ ggplot(foul_long, aes(x = HomeTeam, y = Fouls, color = FoulType, group = HomeTea
       labels = c("mean_HF" = "Home Team Fouls", "mean_AF" = "Away Team Fouls")
   ) +
   labs(
-    title = "Average Home vs Away Fouls per Team",
+    title = "Average Home vs Away Fouls",
+    subtitle = "By Team",
     x = "Team",
     y = "Average Fouls",
     color = "Foul Type"
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-#ggsave("our_newlineplot.png")
+#ggsave("our_newlineplot2.png")
 ```
