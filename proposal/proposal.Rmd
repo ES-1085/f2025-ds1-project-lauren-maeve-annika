@@ -113,3 +113,8 @@ ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
 #ggsave("our_newboxplot.png")
 ```
 
+
+```{r foul-graph}
+
+```
+
