@@ -222,7 +222,7 @@ ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
 
 We couldn't get the colors for the colorblind scale_color_viridis to work properly so we found the closest matched colors from the given color database. We chose this plot since it showed the differences most clearly for the audience. 
 
-```{r foul-graph draft}
+```{r foul-graph draft-one}
 foul_summary <- season |>
   group_by(HomeTeam) |>
   summarise(
@@ -259,4 +259,46 @@ ggplot(foul_long, aes(x = HomeTeam, y = Fouls, color = FoulType, group = HomeTea
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 #ggsave("our_newdumbbellplot.png")
+```
+
+After plot critique and feedback from class, we flipped coordinates of graph, changed the title to be more detailed and added subtitle that explained main takeaway. With suggestions also facet wrapped graph by whether teams had more home or away fouls.
+
+```{r foul-graph ggsave}
+foul_summary <- season |>
+  group_by(HomeTeam) |>
+  summarise(
+    mean_HF = mean(HF, na.rm = TRUE),
+    mean_AF = mean(AF, na.rm = TRUE),
+    discrepancy = abs(mean_HF - mean_AF)
+  ) |>
+  ungroup() |>
+  mutate(foul_bias = ifelse(mean_HF > mean_AF, "More Home Fouls","More Away Fouls"))
+foul_long <- foul_summary |>
+  pivot_longer(
+    cols = c(mean_HF, mean_AF),
+    names_to = "FoulType",
+    values_to = "Fouls"
+  )
+
+foul_long <- foul_long |>
+  mutate(HomeTeam = factor(HomeTeam, levels = foul_summary$HomeTeam[order(-foul_summary$discrepancy)]))
+
+ggplot(foul_long, aes(x = HomeTeam, y = Fouls, color = FoulType, group = HomeTeam)) +
+  geom_line(alpha = 0.5, linewidth = 1) +
+  geom_point(size = 3) +
+  facet_wrap(~ foul_bias, scales = "free_y") +
+  scale_color_manual(
+      values = c("mean_HF" = "salmon", "mean_AF" = "darkturquoise"),
+      labels = c("mean_HF" = "Home Team Fouls", "mean_AF" = "Away Team Fouls")
+  ) +
+  labs(
+    title = "Average Home vs Away Fouls by Bundesliga Soccer League Team",
+    subtitle = "More teams foul more when they're away",
+    x = "Team",
+    y = "Average Fouls",
+    color = "Foul Type"
+  ) +
+  coord_flip()
+
+ggsave("our_newdumbbellplot.png")
 ```
