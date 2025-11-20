@@ -21,7 +21,17 @@ For our dataset, there were no names listed in the Referee variable and it was i
 #season$Referee <- NULL
 ```
 
-### Step 2: _______
+### Step 2: Check for Duplicates
+```{r check-duplicates}
+season <- season |>
+  distinct()
+```
+
+### Step 3: Check for negatives
+```{r check-negatives}
+check_negatives <- season |> 
+  filter(HF < 0 | AF < 0 | HS < 0 | AS < 0 | HST < 0 | AST < 0)
+```
 
 
 
@@ -215,7 +225,6 @@ ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
 #ggsave("our_newboxplot.png")
 ```
 
-
 ### Plot 3: Dumbbell Plot
 
 #### Data cleanup steps specific to plot 3
@@ -263,6 +272,7 @@ ggplot(foul_long, aes(x = HomeTeam, y = Fouls, color = FoulType, group = HomeTea
 
 After plot critique and feedback from class, we flipped coordinates of graph, changed the title to be more detailed and added subtitle that explained main takeaway. With suggestions also facet wrapped graph by whether teams had more home or away fouls. We also added alternative text and changed the bar part of the dumbbell to be a different color so it was more noticeable.
 
+#### Final Plot 3
 ```{r foul-graph ggsave, fig.alt = "Dumbbell plot displaying average fouls by individual team. 11 teams foul more often when they play away and 7 teams foul more often when they play home."}
 foul_summary <- season |>
   group_by(HomeTeam) |>
