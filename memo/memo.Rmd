@@ -27,9 +27,13 @@ For our dataset, there were no names listed in the Referee variable and it was i
 
 ## Plots
 
+### Plot 1: Multi-bar Plot
+
+#### Data cleanup steps specific to plot 1
+
 We chose these colors since they were different enough that someone can glance at the graph and see the difference with the low opacity. We wanted overlap so that each team can compare their home and away game shots taken easily.
 
-```{r average-shots ggsave}
+```{r average-shots}
 team_order <- season |>
   group_by(HomeTeam) |>
   summarise(mean_HS = mean(HS, na.rm = TRUE)) |>
@@ -62,7 +66,7 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
 #ggsave("our_newplot.png")
 ```
 
-```{r multi-bar-average-shots ggsave}
+```{r multi-bar-average-shots}
 team_order <- season |>
   group_by(HomeTeam) |>
   summarise(mean_HS = mean(HS, na.rm = TRUE)) |>
@@ -122,7 +126,7 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
 
 #### Data cleanup steps specific to plot 2
 
-```{r away-vs-home-boxplot}
+```{r away-vs-home-boxplot draft}
 shots_data <- data.frame(
   ShotsOnTarget = c(season$HST, season$AST),
   Team = c(rep("Home", nrow(season)), rep("Away", nrow(season)))
@@ -132,7 +136,7 @@ ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
   labs(
     title = "Home vs Away Shots on Target",
     x = "Team",
-    y = "Shots on Target per Match",
+    y = "Shots on Target",
     fill = "Team"
   ) +
   scale_fill_manual(values = c("Home" = "goldenrod1", "Away" = "palevioletred1"))
@@ -141,7 +145,7 @@ ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
 
 Changed the color to be more colorblind friendly and accessible.
 
-```{r away-vs-home-boxplot}
+```{r away-vs-home-boxplot ggsave}
 shots_data <- data.frame(
   ShotsOnTarget = c(season$HST, season$AST),
   Team = c(rep("Home", nrow(season)), rep("Away", nrow(season)))
@@ -151,9 +155,56 @@ ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
   labs(
     title = "Home vs Away Shots on Target",
     x = "Team",
-    y = "Shots on Target per Match",
+    y = "Shots on Target",
     fill = "Team"
   ) +
   scale_color_viridis_d()
 #ggsave("our_newboxplot.png")
+```
+
+### Plot 3: Dumbbell Plot
+
+#### Data cleanup steps specific to plot 3
+
+We couldn't get the colors for the colorblind scale_color_viridis to work properly so we found the closest matched colors from the given color database. We chose this plot since it showed the differences most clearly for the audience. 
+
+### need to add alternative text to final plots
+
+```{r foul-graph draft}
+foul_summary <- season |>
+  group_by(HomeTeam) |>
+  summarise(
+    mean_HF = mean(HF, na.rm = TRUE),
+    mean_AF = mean(AF, na.rm = TRUE),
+    discrepancy = abs(mean_HF - mean_AF)
+  ) |>
+  ungroup()
+
+foul_long <- foul_summary |>
+  pivot_longer(
+    cols = c(mean_HF, mean_AF),
+    names_to = "FoulType",
+    values_to = "Fouls"
+  )
+
+foul_long <- foul_long |>
+  mutate(HomeTeam = factor(HomeTeam, levels = foul_summary$HomeTeam[order(-foul_summary$discrepancy)]))
+
+ggplot(foul_long, aes(x = HomeTeam, y = Fouls, color = FoulType, group = HomeTeam)) +
+  geom_line(alpha = 0.5, linewidth = 1) +
+  geom_point(size = 3) +
+  scale_color_manual(
+      values = c("mean_HF" = "salmon", "mean_AF" = "darkturquoise"),
+      labels = c("mean_HF" = "Home Team Fouls", "mean_AF" = "Away Team Fouls")
+  ) +
+  labs(
+    title = "Average Home vs Away Fouls",
+    subtitle = "By Team",
+    x = "Team",
+    y = "Average Fouls",
+    color = "Foul Type"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+#ggsave("our_newdumbbellplot.png")
 ```
