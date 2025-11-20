@@ -261,9 +261,9 @@ ggplot(foul_long, aes(x = HomeTeam, y = Fouls, color = FoulType, group = HomeTea
 #ggsave("our_newdumbbellplot.png")
 ```
 
-After plot critique and feedback from class, we flipped coordinates of graph, changed the title to be more detailed and added subtitle that explained main takeaway. With suggestions also facet wrapped graph by whether teams had more home or away fouls.
+After plot critique and feedback from class, we flipped coordinates of graph, changed the title to be more detailed and added subtitle that explained main takeaway. With suggestions also facet wrapped graph by whether teams had more home or away fouls. We also added alternative text and changed the bar part of the dumbbell to be a different color so it was more noticeable.
 
-```{r foul-graph ggsave}
+```{r foul-graph ggsave, fig.alt = "Dumbbell plot displaying average fouls by individual team. 11 teams foul more often when they play away and 7 teams foul more often when they play home."}
 foul_summary <- season |>
   group_by(HomeTeam) |>
   summarise(
@@ -284,7 +284,7 @@ foul_long <- foul_long |>
   mutate(HomeTeam = factor(HomeTeam, levels = foul_summary$HomeTeam[order(-foul_summary$discrepancy)]))
 
 ggplot(foul_long, aes(x = HomeTeam, y = Fouls, color = FoulType, group = HomeTeam)) +
-  geom_line(alpha = 0.5, linewidth = 1) +
+  geom_line(color = "lavenderblush4", alpha = 0.5, linewidth = 1) +
   geom_point(size = 3) +
   facet_wrap(~ foul_bias, scales = "free_y") +
   scale_color_manual(
