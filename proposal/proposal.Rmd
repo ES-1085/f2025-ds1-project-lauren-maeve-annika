@@ -23,7 +23,7 @@ In this project, we are using data from the Football Datasets GitHub Repository.
 
 ```{r glimpse}
 season <- read_csv("../data/season.csv")
-glimpse(season)
+#glimpse(season)
 
 ```
 
