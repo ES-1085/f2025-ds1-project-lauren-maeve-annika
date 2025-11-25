@@ -23,12 +23,14 @@ A link to the code and how we created our graphics in our memo can be found [her
 
 ## Data
 
-Include a citation for your data here. See
-<http://libraryguides.vu.edu.au/c.php?g=386501&p=4347840> for guidance
-on proper citation for datasets. If you got your data off the web, make
-sure to note the retrieval date.
+Football-Data.co.uk 2024, Bundesliga Season 2024–25 Dataset, raw dataset. Data originally published by Football-Data.co.uk; accessed via the datasets/football-datasets GitHub repository on October 14, 2025:
+https://github.com/datasets/football-datasets/blob/main/datasets/bundesliga/season-2425.csv
 
 ## References
 
-List any references here. You should, at a minimum, list your data
-source.
+Stalder, Tobias, and Y. Holtz. “Extended Dumbbell Plot in R with ggplot2.” *R Graph Gallery*, 2021, r-graph-gallery.com/web-extended-dumbbell-plot-ggplot2.html. Accessed 14 Oct. 2025. :contentReference[oaicite:0]{index=0}  
+
+datasets project (GitHub). *Football-Datasets: Bundesliga*. GitHub, github.com/datasets/football-datasets/tree/main. Accessed 14 Oct. 2025.  
+
+Football-Data.co.uk. *Football-Data.co.uk Football Match Data*. Accessed 14 Oct. 2025. www.football-data.co.uk. :contentReference[oaicite:1]{index=1}  
+
