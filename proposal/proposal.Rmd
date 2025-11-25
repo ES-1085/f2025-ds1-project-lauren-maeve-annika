@@ -11,7 +11,7 @@ library(broom)
 
 ## 1. Introduction
 
-The research question we're exploring is how does being the home or away team affect shots taken and shots on target?
+The research question we're exploring is how does playing at home versus away impact team performance, as measured by average shots taken, shots on target, and fouls received?
 
 In this project, we are using data from the Football Datasets GitHub Repository. This dataset provides detailed match statistics for all Bundesliga games in the 2024-2025 season that is taken from the Football Data UK Co website. Each row represents a single match, with information on both the home and away teams, goals scored, shot taken, scores throughout the game, fouls, etc. See README for full variables and names. 
 
@@ -31,7 +31,7 @@ season <- read_csv("../data/season.csv")
 
 - What variables will you visualize to explore your research questions?
 
-We plan to use the HS, AS, HST, AST, HomeTeam, and AwayTeam variables to visualize the question.
+We plan to use the HS, AS, HST, AST, HomeTeam, AwayTeam, HF, and AF variables to visualize the question.
 
 - Will there be any other data that you need to find to help with your research question?
 
@@ -40,14 +40,12 @@ No, as all of our data is in the existing dataset.
 - Very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. 
 
 The data visualization(s) that you believe will be useful in exploring your question(s).
-
- - Histograms - to compare `HomeTeam` and `AwayTeam` depending on `HS` and `AS` 
-
- - Density plots - to compare `HS` and `AS` with `HST` and `AST
-
- - Scatter plot - comparing between the two teams
  
  - Bar plots - to show a difference in `HS` and `AS`
+ 
+ - Multi-bar plots - to show the side by side comparison of `HS` and `AS`
+ 
+ - Dumbbell plots - to show a difference in `HF` and `AF`
 
 
 ```{r summary-stats}
