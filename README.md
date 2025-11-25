@@ -28,9 +28,9 @@ https://github.com/datasets/football-datasets/blob/main/datasets/bundesliga/seas
 
 ## References
 
-Stalder, Tobias, and Y. Holtz. “Extended Dumbbell Plot in R with ggplot2.” *R Graph Gallery*, 2021, r-graph-gallery.com/web-extended-dumbbell-plot-ggplot2.html. Accessed 14 Oct. 2025. :contentReference[oaicite:0]{index=0}  
+Stalder, Tobias, and Y. Holtz. “Extended Dumbbell Plot in R with ggplot2.” *R Graph Gallery*, 2021, r-graph-gallery.com/web-extended-dumbbell-plot-ggplot2.html. Accessed 14 Oct. 2025.
 
 datasets project (GitHub). *Football-Datasets: Bundesliga*. GitHub, github.com/datasets/football-datasets/tree/main. Accessed 14 Oct. 2025.  
 
-Football-Data.co.uk. *Football-Data.co.uk Football Match Data*. Accessed 14 Oct. 2025. www.football-data.co.uk. :contentReference[oaicite:1]{index=1}  
+Football-Data.co.uk. *Football-Data.co.uk Football Match Data*. Accessed 14 Oct. 2025. www.football-data.co.uk. 
 
