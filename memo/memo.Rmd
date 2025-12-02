@@ -294,7 +294,7 @@ ggplot(foul_long, aes(x = HomeTeam, y = Fouls, color = FoulType, group = HomeTea
   geom_point(size = 3) +
   facet_wrap(~ foul_bias, scales = "free_y") +
   scale_color_manual(
-      values = c("mean_HF" = "salmon", "mean_AF" = "darkturquoise"),
+      values = c("mean_HF" = "darkturquoise", "mean_AF" = "salmon"),
       labels = c("mean_HF" = "Home Team Fouls", "mean_AF" = "Away Team Fouls")
   ) +
   labs(
@@ -306,5 +306,5 @@ ggplot(foul_long, aes(x = HomeTeam, y = Fouls, color = FoulType, group = HomeTea
   ) +
   coord_flip()
 
-#ggsave("our_newdumbbellplot.png")
+ggsave("our_newdumbbellplot.png")
 ```
