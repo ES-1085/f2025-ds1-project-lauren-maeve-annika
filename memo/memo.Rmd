@@ -7,6 +7,7 @@ output: github_document
 ```{r load-packages, message = FALSE}
 library(tidyverse)
 library(broom)
+season <- read_csv("/cloud/project/data/season.csv")
 ```
 
 ## Data Clean Up Steps for Overall Data
@@ -82,7 +83,7 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
                          y = Shots,
                          fill = ShotType)) +
   geom_col(position = "dodge", alpha = 0.8) +
-  scale_fill_viridis_d(
+  scale_fill_manual(
     values = c("mean_HS" = "palevioletred1", "mean_AS" = "cornflowerblue"),
     labels = c("mean_HS" = "Average Home Shots", "mean_AS" = "Average Away Shots")
   ) +
@@ -116,7 +117,10 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
                          y = Shots,
                          fill = ShotType)) +
   geom_col(position = "dodge", alpha = 0.8, width = 0.7) +
-  scale_color_viridis_d() +
+  scale_color_manual(
+      values = c("mean_HS" = "salmon", "mean_AS" = "darkturquoise"),
+      labels = c("mean_HF" = "Home Team Shots", "mean_AF" = "Away Team Shots")
+  ) +
   labs(title = "Average Home vs Away Shots per Team",
        x = "Team",
        y = "Average Shots",
@@ -149,7 +153,10 @@ ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
                          y = Shots,
                          fill = ShotType)) +
   geom_col(position = "dodge", alpha = 0.8, width = 0.7) +
-  scale_color_viridis_d() +
+  scale_color_manual(
+      values = c("mean_HS" = "salmon", "mean_AS" = "darkturquoise"),
+      labels = c("mean_HS" = "Home Team Shots", "mean_AS" = "Away Team Shots")
+  ) +
   labs(title = "Average Home vs Away Shots per Bundesliga Soccer Team",
        subtitle = "Teams take more shots when they are the Home Team",
        x = "Team",

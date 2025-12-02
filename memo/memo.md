@@ -2,16 +2,10 @@ Project memo
 ================
 Lauren, Maeve, Annika
 
-This document should contain a detailed account of the data clean up for
-your data and the design choices you are making for your plots. For
-instance you will want to document choices you’ve made that were
-intentional for your graphic, e.g. color you’ve chosen for the plot.
-Think of this document as a code script someone can follow to reproduce
-the data cleaning steps and graphics in your handout.
-
 ``` r
 library(tidyverse)
 library(broom)
+season <- read_csv("/cloud/project/data/season.csv")
 ```
 
 ## Data Clean Up Steps for Overall Data
@@ -25,51 +19,393 @@ it was irrelevant for our project.
 #season$Referee <- NULL
 ```
 
-### Step 2: Rename Variables
+### Step 2: Check for Duplicates
 
-The variables have too many similar names and their names are not
-intuitive to someone unfamiliar with the dataset.
+``` r
+season <- season |>
+  distinct()
+```
 
-\#`` {r rename-variables} #season <- as_tibble(season) %>%  #  rename(  #         `Home_goals` = `FTHG`, #         `Away_goals` = `FTAG`, #         `Fulltime_result` = `FTR`, #         `Halftime_home_goals` = `HTHG`, #         `Halftime_away_goals` = `HTAG`, #         `Halftime_result` = `HTR`, #         `Home_shots` = `HS`, #         `Away_shots` = `AS`, #         `Home_shots_on_target` = `HST`, #         `Away_shots_on_target` = `AST`, #         `Home_fouls` = `HF`, #         `Away_fouls` = `AF`, #         `Home_corner_kicks` = `HC`, #         `Away_corner_kicks` = `AC`, #         `Home_yellow_cards` = `HY`, #         `Away_yellow_cards` = `AY`, #         `Home_red_cards` = `HR`, #         `Away_red_cards` = `AR`,) # ``
+### Step 3: Check for negatives
+
+``` r
+check_negatives <- season |> 
+  filter(HF < 0 | AF < 0 | HS < 0 | AS < 0 | HST < 0 | AST < 0)
+```
 
 ## Plots
 
-### ggsave example for saving plots
-
-``` r
-p1 <- starwars |>
-  filter(mass < 1000, 
-         species %in% c("Human", "Cerean", "Pau'an", "Droid", "Gungan")) |>
-  ggplot() +
-  geom_point(aes(x = mass, 
-                 y = height, 
-                 color = species)) +
-  labs(x = "Weight (kg)", 
-       y = "Height (m)",
-       color = "Species",
-       title = "Weight and Height of Select Starwars Species",
-       caption = paste("This data comes from the starwars api: https://swapi.py43.com"))
-
-
-ggsave("example-starwars.png", width = 4, height = 4)
-
-ggsave("example-starwars-wide.png", width = 6, height = 4)
-```
-
-### Plot 1: \_\_\_\_\_\_\_\_\_
+### Plot 1: Multi-bar Plot
 
 #### Data cleanup steps specific to plot 1
 
-These data cleaning sections are optional and depend on if you have some
-data cleaning steps specific to a particular plot
+We chose these colors since they were different enough that someone can
+glance at the graph and see the difference with the low opacity. We
+wanted overlap so that each team can compare their home and away game
+shots taken easily.
+
+``` r
+team_order <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE)) |>
+  arrange(desc(mean_HS)) |>
+  pull(HomeTeam)
+
+summary_long <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE),
+            mean_AS = mean(AS, na.rm = TRUE)) |>
+  pivot_longer(cols = c(mean_HS, mean_AS),
+               names_to = "ShotType",
+               values_to = "Shots")
+
+ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
+                         y = Shots,
+                         fill = ShotType)) +
+  geom_col(position = "identity", alpha = 0.7) +
+  scale_fill_manual(
+    values = c("mean_HS" = "palevioletred1", "mean_AS" = "palevioletred3"),
+    labels = c("mean_HS" = "Average Home Shots", "mean_AS" = "Average Away Shots")
+  ) +
+  labs(title = "Average Home vs Away Shots per Team",
+       x = "Team",
+       y = "Average Shots",
+       fill = "Shot Type") +
+  coord_flip() +
+  ylim(0, 25)
+```
+
+![](memo_files/figure-gfm/average-shots%20draft-one-1.png)<!-- -->
+
+``` r
+#ggsave("our_newplot.png")
+```
+
+``` r
+team_order <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE)) |>
+  arrange(desc(mean_HS)) |>
+  pull(HomeTeam)
+ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
+                         y = Shots,
+                         fill = ShotType)) +
+  geom_col(position = "dodge", alpha = 0.8) +
+  scale_fill_manual(
+    values = c("mean_HS" = "palevioletred1", "mean_AS" = "cornflowerblue"),
+    labels = c("mean_HS" = "Average Home Shots", "mean_AS" = "Average Away Shots")
+  ) +
+  labs(title = "Average Home vs Away Shots per Team",
+       x = "Team",
+       y = "Average Shots",
+       fill = "Shot Type") +
+  coord_flip() +
+  ylim(0, 25)
+```
+
+![](memo_files/figure-gfm/multi-bar-average-shots%20draft-two-1.png)<!-- -->
+
+Post meeting together, we weren’t sure if the colors would be accessible
+enough for the audience so we chose a color blind friendly option and
+made the bars more separate.
+
+``` r
+team_order <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE)) |>
+  arrange(desc(mean_HS)) |>
+  pull(HomeTeam)
+
+summary_long <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE),
+            mean_AS = mean(AS, na.rm = TRUE)) |>
+  pivot_longer(cols = c(mean_HS, mean_AS),
+               names_to = "ShotType",
+               values_to = "Shots")
+
+ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
+                         y = Shots,
+                         fill = ShotType)) +
+  geom_col(position = "dodge", alpha = 0.8, width = 0.7) +
+  scale_color_manual(
+      values = c("mean_HS" = "salmon", "mean_AS" = "darkturquoise"),
+      labels = c("mean_HF" = "Home Team Shots", "mean_AF" = "Away Team Shots")
+  ) +
+  labs(title = "Average Home vs Away Shots per Team",
+       x = "Team",
+       y = "Average Shots",
+       fill = "Shot Type") +
+  coord_flip() +
+  ylim(0, 25)
+```
+
+    ## Warning: No shared levels found between `names(values)` of the manual scale and the
+    ## data's colour values.
+
+![](memo_files/figure-gfm/multi-bar-average-shots%20draft-three-1.png)<!-- -->
+
+``` r
+#ggsave("our_newplot.png")
+```
+
+From plot critique two, added a subtitle that explained main takeaway of
+the graph as well as a more detailed title and alternative text.
 
 #### Final Plot 1
 
-### Plot 2: \_\_\_\_\_\_\_\_\_
+``` r
+team_order <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE)) |>
+  arrange(desc(mean_HS)) |>
+  pull(HomeTeam)
 
-### Plot 3: \_\_\_\_\_\_\_\_\_\_\_
+summary_long <- season |>
+  group_by(HomeTeam) |>
+  summarise(mean_HS = mean(HS, na.rm = TRUE),
+            mean_AS = mean(AS, na.rm = TRUE)) |>
+  pivot_longer(cols = c(mean_HS, mean_AS),
+               names_to = "ShotType",
+               values_to = "Shots")
 
-Add more plot sections as needed. Each project should have at least 3
-plots, but talk to me if you have fewer than 3.
+ggplot(summary_long, aes(x = factor(HomeTeam, levels = team_order),
+                         y = Shots,
+                         fill = ShotType)) +
+  geom_col(position = "dodge", alpha = 0.8, width = 0.7) +
+  scale_color_manual(
+      values = c("mean_HS" = "salmon", "mean_AS" = "darkturquoise"),
+      labels = c("mean_HS" = "Home Team Shots", "mean_AS" = "Away Team Shots")
+  ) +
+  labs(title = "Average Home vs Away Shots per Bundesliga Soccer Team",
+       subtitle = "Teams take more shots when they are the Home Team",
+       x = "Team",
+       y = "Average Shots",
+       fill = "Shot Type") +
+  coord_flip() +
+  ylim(0, 25)
+```
 
-### Plot 4: \_\_\_\_\_\_\_\_\_\_\_
+    ## Warning: No shared levels found between `names(values)` of the manual scale and the
+    ## data's colour values.
+
+<img src="memo_files/figure-gfm/multi-bar-average-shots ggsave-1.png" alt="Multi-bar chart displaying the average shots taken by each team in the Bundesliga Soccer League. Every team except M'Gladbach and Holsteiin Kiel has more average shots when they are the home team."  />
+
+``` r
+#ggsave("our_newplot.png")
+```
+
+### Plot 2: Box Plot
+
+#### Data cleanup steps specific to plot 2
+
+``` r
+shots_data <- data.frame(
+  ShotsOnTarget = c(season$HST, season$AST),
+  Team = c(rep("Home", nrow(season)), rep("Away", nrow(season)))
+)
+ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
+  geom_boxplot(alpha = 0.8) +
+  labs(
+    title = "Home vs Away Shots on Target",
+    x = "Team",
+    y = "Shots on Target",
+    fill = "Team"
+  ) +
+  scale_fill_manual(values = c("Home" = "goldenrod1", "Away" = "palevioletred1"))
+```
+
+    ## Warning: Removed 2 rows containing non-finite outside the scale range
+    ## (`stat_boxplot()`).
+
+![](memo_files/figure-gfm/away-vs-home-boxplot%20draft-one-1.png)<!-- -->
+
+``` r
+#ggsave("our_newboxplot.png")
+```
+
+Changed the color to be more colorblind friendly and accessible.
+
+``` r
+shots_data <- data.frame(
+  ShotsOnTarget = c(season$HST, season$AST),
+  Team = c(rep("Home", nrow(season)), rep("Away", nrow(season)))
+)
+ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
+  geom_boxplot(alpha = 0.8) +
+  labs(
+    title = "Home vs Away Shots on Target",
+    x = "Team",
+    y = "Shots on Target",
+    fill = "Team"
+  ) +
+  scale_color_viridis_d()
+```
+
+    ## Warning: Removed 2 rows containing non-finite outside the scale range
+    ## (`stat_boxplot()`).
+
+![](memo_files/figure-gfm/away-vs-home-boxplot%20draft-two-1.png)<!-- -->
+
+``` r
+#ggsave("our_newboxplot.png")
+```
+
+Following feedback from class after plot critique two, made title more
+detailed and added a subtitle that explained main takeaway from graph
+and added alternative text.
+
+#### Final Plot 2
+
+``` r
+shots_data <- data.frame(
+  ShotsOnTarget = c(season$HST, season$AST),
+  Team = c(rep("Home", nrow(season)), rep("Away", nrow(season)))
+)
+ggplot(shots_data, aes(x = Team, y = ShotsOnTarget, fill = Team)) +
+  geom_boxplot(alpha = 0.8) +
+  labs(
+    title = "Home Team vs Away Team Shots on Target",
+    subtitle = "Home performs better",
+    y = "Shots on Target",
+    fill = "Team"
+  ) +
+  scale_color_viridis_d()
+```
+
+    ## Warning: Removed 2 rows containing non-finite outside the scale range
+    ## (`stat_boxplot()`).
+
+<img src="memo_files/figure-gfm/away-vs-home-boxplot ggsave-1.png" alt="Box plot that compares away team vs home team as a whole and their shots on target. Home team has a higher average HST and greater IQR which shows that home team performs better."  />
+
+``` r
+#ggsave("our_newboxplot.png")
+```
+
+### Plot 3: Dumbbell Plot
+
+#### Data cleanup steps specific to plot 3
+
+We couldn’t get the colors for the colorblind scale_color_viridis to
+work properly so we found the closest matched colors from the given
+color database. We chose this plot since it showed the differences most
+clearly for the audience.
+
+``` r
+foul_summary <- season |>
+  group_by(HomeTeam) |>
+  summarise(
+    mean_HF = mean(HF, na.rm = TRUE),
+    mean_AF = mean(AF, na.rm = TRUE),
+    discrepancy = abs(mean_HF - mean_AF)
+  ) |>
+  ungroup()
+
+foul_long <- foul_summary |>
+  pivot_longer(
+    cols = c(mean_HF, mean_AF),
+    names_to = "FoulType",
+    values_to = "Fouls"
+  )
+
+foul_long <- foul_long |>
+  mutate(HomeTeam = factor(HomeTeam, levels = foul_summary$HomeTeam[order(-foul_summary$discrepancy)]))
+
+ggplot(foul_long, aes(x = HomeTeam, y = Fouls, color = FoulType, group = HomeTeam)) +
+  geom_line(alpha = 0.5, linewidth = 1) +
+  geom_point(size = 3) +
+  scale_color_manual(
+      values = c("mean_HF" = "salmon", "mean_AF" = "darkturquoise"),
+      labels = c("mean_HF" = "Home Team Fouls", "mean_AF" = "Away Team Fouls")
+  ) +
+  labs(
+    title = "Average Home vs Away Fouls",
+    subtitle = "By Team",
+    x = "Team",
+    y = "Average Fouls",
+    color = "Foul Type"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+![](memo_files/figure-gfm/foul-graph%20draft-one-1.png)<!-- -->
+
+``` r
+#ggsave("our_newdumbbellplot.png")
+```
+
+After plot critique and feedback from class, we flipped coordinates of
+graph, changed the title to be more detailed and added subtitle that
+explained main takeaway. With suggestions also facet wrapped graph by
+whether teams had more home or away fouls. We also added alternative
+text and changed the bar part of the dumbbell to be a different color so
+it was more noticeable.
+
+#### Final Plot 3
+
+``` r
+foul_summary <- season |>
+  group_by(HomeTeam) |>
+  summarise(
+    mean_HF = mean(HF, na.rm = TRUE),
+    mean_AF = mean(AF, na.rm = TRUE),
+    discrepancy = abs(mean_HF - mean_AF)
+  ) |>
+  ungroup() |>
+  mutate(foul_bias = ifelse(mean_HF > mean_AF, "More Home Fouls","More Away Fouls"))
+foul_long <- foul_summary |>
+  pivot_longer(
+    cols = c(mean_HF, mean_AF),
+    names_to = "FoulType",
+    values_to = "Fouls"
+  )
+
+foul_long <- foul_long |>
+  mutate(HomeTeam = factor(HomeTeam, levels = foul_summary$HomeTeam[order(-foul_summary$discrepancy)]))
+
+ggplot(foul_long, aes(x = HomeTeam, y = Fouls, color = FoulType, group = HomeTeam)) +
+  geom_line(color = "lavenderblush4", alpha = 0.5, linewidth = 1) +
+  geom_point(size = 3) +
+  facet_wrap(~ foul_bias, scales = "free_y") +
+  scale_color_manual(
+      values = c("mean_HF" = "darkturquoise", "mean_AF" = "salmon"),
+      labels = c("mean_HF" = "Home Team Fouls", "mean_AF" = "Away Team Fouls")
+  ) +
+  labs(
+    title = "Average Home vs Away Fouls by Bundesliga Soccer League Team",
+    subtitle = "More teams foul more when they're away",
+    x = "Team",
+    y = "Average Fouls",
+    color = "Foul Type"
+  ) +
+  coord_flip()
+```
+
+<img src="memo_files/figure-gfm/foul-graph ggsave-1.png" alt="Dumbbell plot displaying average fouls by individual team. 11 teams foul more often when they play away and 7 teams foul more often when they play home."  />
+
+``` r
+#ggsave("our_newdumbbellplot.png")
+```
+
+### Plot 4: Pie Chart
+
+``` r
+yellow_totals <- data.frame(
+  Team = c("Away", "Home"),
+  TotalYellows = c(sum(season$AY, na.rm = TRUE),
+                   sum(season$HY, na.rm = TRUE))
+)
+
+ggplot(yellow_totals, aes(x = "", y = TotalYellows, fill = Team)) +
+  geom_col(width = 1) +
+  coord_polar("y") +
+  scale_fill_manual(values = c("Away" = "salmon", "Home" = "darkturquoise")) +
+  labs(
+    title = "Season Total Yellow Cards",
+    subtitle = "Home vs. Away Teams",
+    fill = "Team"
+  ) +
+  theme_void()
+```
+
+![](memo_files/figure-gfm/yellow-cards%20pie-chart-1.png)<!-- -->
