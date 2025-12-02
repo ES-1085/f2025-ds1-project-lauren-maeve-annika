@@ -306,5 +306,5 @@ ggplot(foul_long, aes(x = HomeTeam, y = Fouls, color = FoulType, group = HomeTea
   ) +
   coord_flip()
 
-ggsave("our_newdumbbellplot.png")
+#ggsave("our_newdumbbellplot.png")
 ```
