@@ -330,3 +330,59 @@ ggplot(yellow_totals, aes(x = "", y = TotalYellows, fill = Team)) +
   theme_void()
 ```
 
+
+```{r scatter-plot-corners}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+overall_means <- season |>
+  summarise(
+    avg_HC_overall = mean(HC, na.rm = TRUE),
+    avg_AC_overall = mean(AC, na.rm = TRUE)
+  ) |>
+  pivot_longer(
+    everything(),
+    names_to = "Type",
+    values_to = "OverallAvg"
+  ) |>
+  mutate(
+    Type = ifelse(Type == "avg_HC_overall", "avg_HC", "avg_AC")
+  )
+
+team_data <- season |>
+  summarise(avg_HC = mean(HC, na.rm = TRUE), .by = HomeTeam) |>
+  rename(Team = HomeTeam) |>
+  full_join(
+    season |>
+      summarise(avg_AC = mean(AC, na.rm = TRUE), .by = AwayTeam) |>
+      rename(Team = AwayTeam),
+    by = "Team"
+  ) |>
+  pivot_longer(
+    cols = c(avg_HC, avg_AC),
+    names_to = "Type",
+    values_to = "AvgCorners"
+  )
+
+ggplot(team_data, aes(x = Team, y = AvgCorners)) +
+  geom_point(aes(color = Type), size = 3) +
+  geom_hline(data = overall_means,
+             aes(yintercept = OverallAvg),
+             linetype = "dashed",
+             linewidth = 0.8,
+             color = "black") +
+  facet_wrap(~ Type, scales = "free_y") +
+  scale_color_manual(
+    values = c("avg_HC" = "darkturquoise", "avg_AC" = "salmon")
+  ) +
+  labs(
+    title = "Average Corner Kicks per Team (Home vs Away)",
+    x = "Team",
+    y = "Average Corners"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  coord_flip()
+```
+
