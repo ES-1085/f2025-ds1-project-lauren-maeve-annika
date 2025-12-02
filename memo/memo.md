@@ -415,6 +415,10 @@ ggplot(yellow_totals, aes(x = "", y = TotalYellows, fill = Team)) +
 
 <img src="memo_files/figure-gfm/yellow-cards pie-chart-1.png" alt="Pie chart displaying amount of yellow cards that Away and Home teams have gotten, Away team has more yellow cards showing that teams play more aggressively when they are the away team"  />
 
+### Final Plot 5: Scatter Chart
+
+#### Data cleanup steps specific to plot 5
+
 ``` r
 library(dplyr)
 library(tidyr)

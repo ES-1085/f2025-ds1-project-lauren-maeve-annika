@@ -341,6 +341,9 @@ ggplot(yellow_totals, aes(x = "", y = TotalYellows, fill = Team)) +
   theme_void()
 ```
 
+### Final Plot 5: Scatter Chart
+
+#### Data cleanup steps specific to plot 5
 
 ```{r scatter-plot-corners, fig.alt = "Scatter plot showing the average amount of corner kicks that each team has. Home teams on average have more corner kicks so they play better when they are the home team."}
 library(dplyr)
