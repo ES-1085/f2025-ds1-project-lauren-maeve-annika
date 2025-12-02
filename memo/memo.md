@@ -387,7 +387,12 @@ ggplot(foul_long, aes(x = HomeTeam, y = Fouls, color = FoulType, group = HomeTea
 #ggsave("our_newdumbbellplot.png")
 ```
 
-### Plot 4: Pie Chart
+### Final Plot 4: Pie Chart
+
+#### Data cleanup steps specific to plot 4
+
+We wanted to create a simple graph to display teams aggressiveness and
+whether that changed depending on where they played.
 
 ``` r
 yellow_totals <- data.frame(
@@ -401,11 +406,67 @@ ggplot(yellow_totals, aes(x = "", y = TotalYellows, fill = Team)) +
   coord_polar("y") +
   scale_fill_manual(values = c("Away" = "salmon", "Home" = "darkturquoise")) +
   labs(
-    title = "Season Total Yellow Cards",
-    subtitle = "Home vs. Away Teams",
+    title = "Home vs Away Teams Total Yellow Cards",
+    subtitle = "Away Team plays more aggressively and has more yellow cards",
     fill = "Team"
   ) +
   theme_void()
 ```
 
-![](memo_files/figure-gfm/yellow-cards%20pie-chart-1.png)<!-- -->
+<img src="memo_files/figure-gfm/yellow-cards pie-chart-1.png" alt="Pie chart displaying amount of yellow cards that Away and Home teams have gotten, Away team has more yellow cards showing that teams play more aggressively when they are the away team"  />
+
+``` r
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+overall_means <- season |>
+  summarise(
+    avg_HC_overall = mean(HC, na.rm = TRUE),
+    avg_AC_overall = mean(AC, na.rm = TRUE)
+  ) |>
+  pivot_longer(
+    everything(),
+    names_to = "Type",
+    values_to = "OverallAvg"
+  ) |>
+  mutate(
+    Type = ifelse(Type == "avg_HC_overall", "avg_HC", "avg_AC")
+  )
+
+team_data <- season |>
+  summarise(avg_HC = mean(HC, na.rm = TRUE), .by = HomeTeam) |>
+  rename(Team = HomeTeam) |>
+  full_join(
+    season |>
+      summarise(avg_AC = mean(AC, na.rm = TRUE), .by = AwayTeam) |>
+      rename(Team = AwayTeam),
+    by = "Team"
+  ) |>
+  pivot_longer(
+    cols = c(avg_HC, avg_AC),
+    names_to = "Type",
+    values_to = "AvgCorners"
+  )
+ggplot(team_data, aes(x = Team, y = AvgCorners)) +
+  geom_point(aes(color = Type), size = 3) +
+  geom_hline(data = overall_means,
+             aes(yintercept = OverallAvg),
+             linetype = "dashed",
+             linewidth = 0.8,
+             color = "black") +
+  facet_wrap(~ Type, scales = "free_y") +
+  scale_color_manual(
+    values = c("avg_HC" = "darkturquoise", "avg_AC" = "salmon"),
+    labels = c("avg_HC" = "Home Corner Kicks", "avg_AC" = "Away Corner Kicks")
+  ) +
+  labs(
+    title = "Average Corner Kicks per Home vs Away Team",
+    subtitle = "Home Team plays better and earns more corner kicks",
+    x = "Team",
+    y = "Average Corners"
+  ) +
+  coord_flip()
+```
+
+<img src="memo_files/figure-gfm/scatter-plot-corners-1.png" alt="Scatter plot showing the average amount of corner kicks that each team has. Home teams on average have more corner kicks so they play better when they are the home team."  />

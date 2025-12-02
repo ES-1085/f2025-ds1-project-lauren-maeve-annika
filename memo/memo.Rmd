@@ -316,9 +316,13 @@ ggplot(foul_long, aes(x = HomeTeam, y = Fouls, color = FoulType, group = HomeTea
 #ggsave("our_newdumbbellplot.png")
 ```
 
-### Plot 4: Pie Chart
+### Final Plot 4: Pie Chart
 
-```{r yellow-cards pie-chart}
+#### Data cleanup steps specific to plot 4
+
+We wanted to create a simple graph to display teams aggressiveness and whether that changed depending on where they played. 
+
+```{r yellow-cards pie-chart, fig.alt = "Pie chart displaying amount of yellow cards that Away and Home teams have gotten, Away team has more yellow cards showing that teams play more aggressively when they are the away team"}
 yellow_totals <- data.frame(
   Team = c("Away", "Home"),
   TotalYellows = c(sum(season$AY, na.rm = TRUE),
@@ -330,15 +334,15 @@ ggplot(yellow_totals, aes(x = "", y = TotalYellows, fill = Team)) +
   coord_polar("y") +
   scale_fill_manual(values = c("Away" = "salmon", "Home" = "darkturquoise")) +
   labs(
-    title = "Season Total Yellow Cards",
-    subtitle = "Home vs. Away Teams",
+    title = "Home vs Away Teams Total Yellow Cards",
+    subtitle = "Away Team plays more aggressively and has more yellow cards",
     fill = "Team"
   ) +
   theme_void()
 ```
 
 
-```{r scatter-plot-corners}
+```{r scatter-plot-corners, fig.alt = "Scatter plot showing the average amount of corner kicks that each team has. Home teams on average have more corner kicks so they play better when they are the home team."}
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -371,7 +375,6 @@ team_data <- season |>
     names_to = "Type",
     values_to = "AvgCorners"
   )
-
 ggplot(team_data, aes(x = Team, y = AvgCorners)) +
   geom_point(aes(color = Type), size = 3) +
   geom_hline(data = overall_means,
@@ -381,15 +384,15 @@ ggplot(team_data, aes(x = Team, y = AvgCorners)) +
              color = "black") +
   facet_wrap(~ Type, scales = "free_y") +
   scale_color_manual(
-    values = c("avg_HC" = "darkturquoise", "avg_AC" = "salmon")
+    values = c("avg_HC" = "darkturquoise", "avg_AC" = "salmon"),
+    labels = c("avg_HC" = "Home Corner Kicks", "avg_AC" = "Away Corner Kicks")
   ) +
   labs(
-    title = "Average Corner Kicks per Team (Home vs Away)",
+    title = "Average Corner Kicks per Home vs Away Team",
+    subtitle = "Home Team plays better and earns more corner kicks",
     x = "Team",
     y = "Average Corners"
   ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
   coord_flip()
 ```
 
