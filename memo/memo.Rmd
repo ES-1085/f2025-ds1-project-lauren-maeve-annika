@@ -311,7 +311,22 @@ ggplot(foul_long, aes(x = HomeTeam, y = Fouls, color = FoulType, group = HomeTea
 
 ### Plot 4: Pie Chart
 
-```{r}
+```{r yellow-cards pie-chart}
+yellow_totals <- data.frame(
+  Team = c("Away", "Home"),
+  TotalYellows = c(sum(season$AY, na.rm = TRUE),
+                   sum(season$HY, na.rm = TRUE))
+)
 
+ggplot(yellow_totals, aes(x = "", y = TotalYellows, fill = Team)) +
+  geom_col(width = 1) +
+  coord_polar("y") +
+  scale_fill_manual(values = c("Away" = "salmon", "Home" = "darkturquoise")) +
+  labs(
+    title = "Season Total Yellow Cards",
+    subtitle = "Home vs. Away Teams",
+    fill = "Team"
+  ) +
+  theme_void()
 ```
 
